@@ -13,9 +13,24 @@ const app: Application = express();
 // Connect to database
 connectDB();
 
-// Middleware
+// CORS - Allow multiple frontend ports in development
+const allowedOrigins = [
+  config.frontendUrl,
+  'http://localhost:5173',
+  'http://localhost:5174',
+];
+
 app.use(cors({
-  origin: config.frontendUrl,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 

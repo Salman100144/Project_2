@@ -49,7 +49,11 @@ export const auth = betterAuth({
   },
   
   // Trusted origins for CORS
-  trustedOrigins: [config.frontendUrl],
+  trustedOrigins: [
+    config.frontendUrl,
+    'http://localhost:5173',
+    'http://localhost:5174',
+  ],
   
   // Advanced options
   advanced: {

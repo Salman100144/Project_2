@@ -47,17 +47,17 @@
 
 ## Phase 3: Products Module ← (Current)
 ### Tasks:
-- [ ] Fetch products from DummyJSON API
-- [ ] Create Product types/interfaces
+- [x] Fetch products from DummyJSON API
+- [x] Create Product types/interfaces
 - [ ] Backend: Product caching layer (optional)
-- [ ] Frontend: Products store (Zustand)
-- [ ] Frontend: Product listing page
-- [ ] Frontend: Product card component
-- [ ] Frontend: Product detail page
-- [ ] Frontend: Category filter
-- [ ] Frontend: Search functionality
-- [ ] Frontend: Sorting (price, rating)
-- [ ] Frontend: Pagination
+- [x] Frontend: Products store (Zustand)
+- [x] Frontend: Product listing page
+- [x] Frontend: Product card component
+- [x] Frontend: Product detail page
+- [x] Frontend: Category filter
+- [x] Frontend: Search functionality
+- [x] Frontend: Sorting (price, rating)
+- [x] Frontend: Pagination
 
 ### Acceptance Criteria:
 - Products display with images, price, title

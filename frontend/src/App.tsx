@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage, RegisterPage } from '@/pages/auth';
-import { HomePage } from '@/pages';
+import { HomePage, ProductsPage, ProductDetailPage } from '@/pages';
 import { AuthProvider, ProtectedRoute, GuestRoute } from '@/components/auth';
+import { MainLayout } from '@/layouts/MainLayout';
 
 function App() {
   return (
@@ -26,15 +27,19 @@ function App() {
             } 
           />
           
-          {/* Protected Routes */}
+          {/* Protected Routes with Layout */}
           <Route 
             path="/" 
             element={
               <ProtectedRoute>
-                <HomePage />
+                <MainLayout />
               </ProtectedRoute>
-            } 
-          />
+            }
+          >
+            <Route index element={<HomePage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/:id" element={<ProductDetailPage />} />
+          </Route>
           
           {/* 404 fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
