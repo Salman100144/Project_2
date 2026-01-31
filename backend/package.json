@@ -24,7 +24,8 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mongodb": "^7.0.0",
-    "mongoose": "^9.1.5"
+    "mongoose": "^9.1.5",
+    "stripe": "^20.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

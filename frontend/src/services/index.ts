@@ -9,3 +9,6 @@ export * from './cart.service';
 
 export { default as wishlistService } from './wishlist.service';
 export * from './wishlist.service';
+
+export { default as orderService } from './order.service';
+export * from './order.service';

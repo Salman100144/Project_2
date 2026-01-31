@@ -202,13 +202,16 @@ export function CartPage() {
                 className="w-full" 
                 size="lg"
                 disabled={isUpdating}
+                asChild
               >
-                {isUpdating ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                )}
-                Proceed to Checkout
+                <Link to="/checkout">
+                  {isUpdating ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <ShoppingBag className="h-4 w-4 mr-2" />
+                  )}
+                  Proceed to Checkout
+                </Link>
               </Button>
             </CardFooter>
           </Card>

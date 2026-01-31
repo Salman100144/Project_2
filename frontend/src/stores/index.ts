@@ -30,3 +30,5 @@ export {
   useWishlistUpdating,
   useWishlistError,
 } from './wishlist.store';
+
+export { useOrderStore } from './order.store';

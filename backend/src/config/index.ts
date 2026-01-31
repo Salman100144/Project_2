@@ -8,4 +8,9 @@ export const config = {
   mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce',
   authSecret: process.env.AUTH_SECRET || 'default-secret',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+  // Stripe configuration
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
 } as const;
+
+export { stripe } from './stripe';
