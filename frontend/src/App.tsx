@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage } from '@/pages/auth';
+import { LoginPage, RegisterPage } from '@/pages/auth';
 
 function App() {
   return (
@@ -7,6 +7,7 @@ function App() {
       <Routes>
         {/* Auth Routes */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         
         {/* Redirect root to login for now */}
         <Route path="/" element={<Navigate to="/login" replace />} />

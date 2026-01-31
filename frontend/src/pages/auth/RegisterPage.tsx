@@ -5,31 +5,55 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Mail, Lock, ShoppingBag } from 'lucide-react';
+import { Loader2, Mail, Lock, User, ShoppingBag } from 'lucide-react';
 
-export function LoginPage() {
+export function RegisterPage() {
   const navigate = useNavigate();
-  const { login, isLoading, error, clearError } = useAuthStore();
+  const { register, isLoading, error, clearError } = useAuthStore();
   
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
+  
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (error) clearError();
+    if (validationError) setValidationError(null);
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
-    const success = await login(formData);
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setValidationError('Passwords do not match');
+      return;
+    }
+    
+    // Validate password length
+    if (formData.password.length < 8) {
+      setValidationError('Password must be at least 8 characters');
+      return;
+    }
+    
+    const success = await register({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
+    
     if (success) {
       navigate('/');
     }
   };
+
+  const displayError = validationError || error?.message;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4">
@@ -40,19 +64,38 @@ export function LoginPage() {
               <ShoppingBag className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
           <CardDescription>
-            Enter your credentials to access your account
+            Enter your details to get started
           </CardDescription>
         </CardHeader>
         
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {error && (
+            {displayError && (
               <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
-                {error.message}
+                {displayError}
               </div>
             )}
+            
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                  autoComplete="name"
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
             
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -74,27 +117,41 @@ export function LoginPage() {
             </div>
             
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link 
-                  to="/forgot-password" 
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   name="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                   value={formData.password}
                   onChange={handleChange}
                   className="pl-10"
                   required
-                  autoComplete="current-password"
+                  autoComplete="new-password"
+                  disabled={isLoading}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Must be at least 8 characters
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                  autoComplete="new-password"
                   disabled={isLoading}
                 />
               </div>
@@ -110,20 +167,20 @@ export function LoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  Creating account...
                 </>
               ) : (
-                'Sign in'
+                'Create account'
               )}
             </Button>
             
             <p className="text-sm text-center text-muted-foreground">
-              Don't have an account?{' '}
+              Already have an account?{' '}
               <Link 
-                to="/register" 
+                to="/login" 
                 className="text-primary font-medium hover:underline"
               >
-                Sign up
+                Sign in
               </Link>
             </p>
           </CardFooter>
@@ -133,4 +190,4 @@ export function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

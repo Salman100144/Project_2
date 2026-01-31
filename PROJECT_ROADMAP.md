@@ -9,21 +9,21 @@
 
 ---
 
-## Phase 1: Foundation Setup ✅ (Current)
+## Phase 1: Foundation Setup ✅
 ### Tasks:
 - [x] Create folder structure
 - [x] Create best practices documentation
 - [x] Initialize frontend with Vite + React + TypeScript
 - [x] Configure Tailwind CSS
 - [x] Install and configure shadcn/ui
-- [ ] Set up Zustand store structure
+- [x] Set up Zustand store structure
 - [x] Initialize backend with Express + TypeScript
 - [x] Configure MongoDB connection
 - [x] Set up basic routing structure
 
 ---
 
-## Phase 2: Authentication
+## Phase 2: Authentication ← (Current)
 ### Tasks:
 - [x] Set up BetterAuth on backend
 - [x] Create User model (Mongoose)
@@ -32,8 +32,8 @@
 - [x] Implement logout endpoint (POST /api/auth/sign-out)
 - [x] Create auth middleware
 - [x] Frontend: Create auth store (Zustand)
-- [ ] Frontend: Login page
-- [ ] Frontend: Register page
+- [x] Frontend: Login page
+- [x] Frontend: Register page
 - [ ] Frontend: Protected routes
 - [ ] Frontend: Auth context/provider
 
