@@ -67,6 +67,25 @@ export interface CreatePaymentIntentResponse {
   paymentIntentId: string;
 }
 
+/**
+ * Paginated orders response from API
+ */
+export interface PaginatedOrdersResponse {
+  orders: Order[];
+  total: number;
+  page: number;
+  pages: number;
+}
+
+/**
+ * Query params for fetching orders
+ */
+export interface OrdersQueryParams {
+  page?: number;
+  limit?: number;
+  status?: OrderStatus;
+}
+
 export interface CheckoutFormData {
   shippingAddress: ShippingAddress;
 }

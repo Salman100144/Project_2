@@ -115,28 +115,28 @@
 
 ---
 
-## Phase 6: Order Tracking ← (Current)
+## Phase 6: Order Tracking ✅
 ### Tasks:
 - [x] Backend: Order status enum (pending, processing, shipped, delivered)
 - [x] Backend: Status history tracking with timestamps
 - [x] Backend: Tracking info (carrier, tracking number, estimated delivery)
 - [x] Backend: Update order status endpoint (PATCH /api/orders/:id/status)
 - [x] Backend: Get all orders endpoint for admin (GET /api/orders/admin/all)
-- [ ] Backend: Order history endpoint
-- [ ] Backend: Single order detail endpoint
+- [x] Backend: Order history endpoint (GET /api/orders with pagination)
+- [x] Backend: Single order detail endpoint (GET /api/orders/:orderId)
 - [x] Frontend: Order history page
 - [x] Frontend: Order detail page
 - [x] Frontend: Order status tracker component
 - [x] Frontend: Order timeline visualization
 
 ### Acceptance Criteria:
-- Users can view order history
-- Each order shows current status
-- Visual timeline of order progress
+- ✅ Users can view order history
+- ✅ Each order shows current status
+- ✅ Visual timeline of order progress
 
 ---
 
-## Phase 7: Admin Panel
+## Phase 7: Admin Panel ← (Current)
 ### Tasks:
 - [ ] Backend: Admin role check middleware
 - [ ] Backend: Admin product management endpoints

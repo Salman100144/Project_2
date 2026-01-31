@@ -2,7 +2,9 @@ import api from '@/lib/axios';
 import type { 
   Order, 
   CreatePaymentIntentResponse, 
-  ShippingAddress 
+  ShippingAddress,
+  PaginatedOrdersResponse,
+  OrdersQueryParams
 } from '@/types/order.types';
 
 /**
@@ -41,10 +43,10 @@ export const orderService = {
   },
 
   /**
-   * Get all user orders
+   * Get all user orders with pagination
    */
-  async getUserOrders(): Promise<Order[]> {
-    const response = await api.get<Order[]>('/api/orders');
+  async getUserOrders(params?: OrdersQueryParams): Promise<PaginatedOrdersResponse> {
+    const response = await api.get<PaginatedOrdersResponse>('/api/orders', { params });
     return response.data;
   },
 };

@@ -136,13 +136,34 @@ export class OrderService {
   }
 
   /**
-   * Get all orders for a user
+   * Get all orders for a user with pagination
    */
-  static async getUserOrders(userId: string): Promise<Order[]> {
-    const orders = await OrderModel.find({ userId })
-      .sort({ createdAt: -1 })
-      .lean();
-    return orders.map(order => ({ ...order, _id: order._id.toString() })) as Order[];
+  static async getUserOrders(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+    status?: OrderStatus
+  ): Promise<{ orders: Order[]; total: number; page: number; pages: number }> {
+    const query: any = { userId };
+    if (status) {
+      query.orderStatus = status;
+    }
+
+    const [orders, total] = await Promise.all([
+      OrderModel.find(query)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .lean(),
+      OrderModel.countDocuments(query),
+    ]);
+
+    return {
+      orders: orders.map(order => ({ ...order, _id: order._id.toString() })) as Order[],
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    };
   }
 
   /**

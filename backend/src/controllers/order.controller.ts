@@ -90,8 +90,9 @@ export class OrderController {
   }
 
   /**
-   * Get all user orders
+   * Get all user orders with pagination
    * GET /api/orders
+   * Query params: page, limit, status
    */
   static async getUserOrders(req: Request, res: Response, next: NextFunction) {
     try {
@@ -101,9 +102,21 @@ export class OrderController {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
-      const orders = await OrderService.getUserOrders(userId);
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const status = req.query.status as string | undefined;
+
+      // Validate status if provided
+      if (status) {
+        const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+          return res.status(400).json({ message: 'Invalid status filter' });
+        }
+      }
+
+      const result = await OrderService.getUserOrders(userId, page, limit, status as any);
       
-      res.json(orders);
+      res.json(result);
     } catch (error) {
       next(error);
     }

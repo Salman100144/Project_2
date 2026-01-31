@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { orderService } from '@/services/order.service';
-import type { Order, ShippingAddress, CreatePaymentIntentResponse } from '@/types/order.types';
+import type { Order, ShippingAddress, CreatePaymentIntentResponse, OrdersQueryParams, OrderStatus } from '@/types/order.types';
 
 interface OrderState {
   // Payment intent
@@ -14,6 +14,12 @@ interface OrderState {
   orders: Order[];
   currentOrder: Order | null;
   
+  // Pagination
+  totalOrders: number;
+  currentPage: number;
+  totalPages: number;
+  statusFilter: OrderStatus | null;
+  
   // State
   isLoading: boolean;
   error: string | null;
@@ -22,8 +28,9 @@ interface OrderState {
   setShippingAddress: (address: ShippingAddress) => void;
   createPaymentIntent: (shippingAddress: ShippingAddress) => Promise<CreatePaymentIntentResponse>;
   confirmOrder: (paymentIntentId: string) => Promise<Order>;
-  fetchOrders: () => Promise<void>;
+  fetchOrders: (params?: OrdersQueryParams) => Promise<void>;
   fetchOrder: (orderId: string) => Promise<void>;
+  setStatusFilter: (status: OrderStatus | null) => void;
   clearCheckout: () => void;
 }
 
@@ -33,6 +40,10 @@ export const useOrderStore = create<OrderState>((set, get) => ({
   shippingAddress: null,
   orders: [],
   currentOrder: null,
+  totalOrders: 0,
+  currentPage: 1,
+  totalPages: 0,
+  statusFilter: null,
   isLoading: false,
   error: null,
 
@@ -82,11 +93,22 @@ export const useOrderStore = create<OrderState>((set, get) => ({
     }
   },
 
-  fetchOrders: async () => {
+  fetchOrders: async (params) => {
     set({ isLoading: true, error: null });
     try {
-      const orders = await orderService.getUserOrders();
-      set({ orders, isLoading: false });
+      const { statusFilter } = get();
+      const queryParams: OrdersQueryParams = {
+        ...params,
+        status: params?.status ?? statusFilter ?? undefined,
+      };
+      const result = await orderService.getUserOrders(queryParams);
+      set({ 
+        orders: result.orders,
+        totalOrders: result.total,
+        currentPage: result.page,
+        totalPages: result.pages,
+        isLoading: false,
+      });
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to fetch orders';
       set({ isLoading: false, error: message });
@@ -102,6 +124,10 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       const message = error.response?.data?.message || 'Failed to fetch order';
       set({ isLoading: false, error: message });
     }
+  },
+
+  setStatusFilter: (status) => {
+    set({ statusFilter: status });
   },
 
   clearCheckout: () => {
