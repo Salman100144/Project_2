@@ -23,7 +23,7 @@
 
 ---
 
-## Phase 2: Authentication ← (Current)
+## Phase 2: Authentication ✅
 ### Tasks:
 - [x] Set up BetterAuth on backend
 - [x] Create User model (Mongoose)
@@ -34,8 +34,8 @@
 - [x] Frontend: Create auth store (Zustand)
 - [x] Frontend: Login page
 - [x] Frontend: Register page
-- [ ] Frontend: Protected routes
-- [ ] Frontend: Auth context/provider
+- [x] Frontend: Protected routes
+- [x] Frontend: Auth context/provider
 
 ### Acceptance Criteria:
 - Users can register with email/password
@@ -45,7 +45,7 @@
 
 ---
 
-## Phase 3: Products Module
+## Phase 3: Products Module ← (Current)
 ### Tasks:
 - [ ] Fetch products from DummyJSON API
 - [ ] Create Product types/interfaces
