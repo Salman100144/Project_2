@@ -36,11 +36,13 @@ export const logout = async (): Promise<void> => {
 
 /**
  * Get the current authenticated user
+ * Uses BetterAuth's get-session endpoint which automatically reads cookies
  */
 export const getCurrentUser = async (): Promise<User | null> => {
   try {
-    const response = await api.get<{ success: boolean; data: User }>('/api/users/me');
-    return response.data.data;
+    // BetterAuth's get-session endpoint returns user and session info
+    const response = await api.get<{ user: User; session: any }>('/api/auth/get-session');
+    return response.data?.user || null;
   } catch (error) {
     // User is not authenticated
     return null;

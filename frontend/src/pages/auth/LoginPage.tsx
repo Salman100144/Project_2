@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,11 @@ import { Loader2, Mail, Lock, ShoppingBag } from 'lucide-react';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, isLoading, error, clearError } = useAuthStore();
+  
+  // Get the redirect destination from location state (set by ProtectedRoute)
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
   
   const [formData, setFormData] = useState({
     email: '',
@@ -27,7 +31,8 @@ export function LoginPage() {
     
     const success = await login(formData);
     if (success) {
-      navigate('/');
+      // Redirect to the originally intended page
+      navigate(from, { replace: true });
     }
   };
 
