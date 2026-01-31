@@ -20,8 +20,28 @@ export interface ShippingAddress {
   phone?: string;
 }
 
+// Order status flow: pending -> processing -> shipped -> delivered
+// cancelled can happen at any point before delivered
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+
+/**
+ * Status history entry for tracking order progress
+ */
+export interface StatusHistoryEntry {
+  status: OrderStatus;
+  timestamp: string;
+  note?: string;
+}
+
+/**
+ * Tracking information for shipped orders
+ */
+export interface TrackingInfo {
+  carrier?: string;
+  trackingNumber?: string;
+  estimatedDelivery?: string;
+}
 
 export interface Order {
   _id: string;
@@ -36,6 +56,8 @@ export interface Order {
   paymentIntentId: string;
   paymentStatus: PaymentStatus;
   orderStatus: OrderStatus;
+  statusHistory: StatusHistoryEntry[];
+  trackingInfo?: TrackingInfo;
   createdAt: string;
   updatedAt: string;
 }

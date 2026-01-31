@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { Order, OrderItem, ShippingAddress, OrderStatus, PaymentStatus } from '../types/order.types';
+import { Order, OrderItem, ShippingAddress, OrderStatus, PaymentStatus, StatusHistoryEntry, TrackingInfo } from '../types/order.types';
 
 export interface IOrder extends Omit<Order, '_id'>, Document {}
 
@@ -23,6 +23,28 @@ const ShippingAddressSchema = new Schema<ShippingAddress>(
     postalCode: { type: String, required: true },
     country: { type: String, required: true },
     phone: { type: String },
+  },
+  { _id: false }
+);
+
+const StatusHistorySchema = new Schema<StatusHistoryEntry>(
+  {
+    status: { 
+      type: String, 
+      enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+      required: true 
+    },
+    timestamp: { type: Date, required: true, default: Date.now },
+    note: { type: String },
+  },
+  { _id: false }
+);
+
+const TrackingInfoSchema = new Schema<TrackingInfo>(
+  {
+    carrier: { type: String },
+    trackingNumber: { type: String },
+    estimatedDelivery: { type: Date },
   },
   { _id: false }
 );
@@ -85,6 +107,14 @@ const OrderSchema = new Schema<IOrder>(
       enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
       default: 'pending',
     },
+    statusHistory: {
+      type: [StatusHistorySchema],
+      default: [],
+    },
+    trackingInfo: {
+      type: TrackingInfoSchema,
+      default: null,
+    },
   },
   { 
     timestamps: true,
@@ -93,8 +123,7 @@ const OrderSchema = new Schema<IOrder>(
   }
 );
 
-// Indexes for common queries
-OrderSchema.index({ paymentIntentId: 1 });
+// Indexes for common queries (paymentIntentId index is created via unique: true)
 OrderSchema.index({ paymentStatus: 1 });
 OrderSchema.index({ orderStatus: 1 });
 OrderSchema.index({ createdAt: -1 });

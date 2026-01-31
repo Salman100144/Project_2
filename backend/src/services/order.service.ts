@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import { stripe } from '../config/stripe';
 import { OrderModel } from '../models/order.model';
 import Cart from '../models/cart.model';
-import { CreateOrderPayload, Order, ShippingAddress } from '../types/order.types';
+import { CreateOrderPayload, Order, ShippingAddress, OrderStatus, UpdateOrderStatusPayload, TrackingInfo } from '../types/order.types';
 import type { ICartItem } from '../models/cart.model';
 
 /**
@@ -108,6 +108,10 @@ export class OrderService {
       paymentIntentId,
       paymentStatus: 'paid',
       orderStatus: 'processing',
+      statusHistory: [
+        { status: 'pending', timestamp: new Date(), note: 'Order placed' },
+        { status: 'processing', timestamp: new Date(), note: 'Payment confirmed' },
+      ],
     });
 
     // Clear cart after successful order
@@ -139,6 +143,82 @@ export class OrderService {
       .sort({ createdAt: -1 })
       .lean();
     return orders.map(order => ({ ...order, _id: order._id.toString() })) as Order[];
+  }
+
+  /**
+   * Update order status (admin function)
+   */
+  static async updateOrderStatus(
+    orderId: string,
+    payload: UpdateOrderStatusPayload
+  ): Promise<Order | null> {
+    const { status, note, trackingInfo } = payload;
+
+    // Validate status transition
+    const order = await OrderModel.findById(orderId);
+    if (!order) return null;
+
+    // Define valid status transitions
+    const validTransitions: Record<OrderStatus, OrderStatus[]> = {
+      pending: ['processing', 'cancelled'],
+      processing: ['shipped', 'cancelled'],
+      shipped: ['delivered', 'cancelled'],
+      delivered: [], // Final state
+      cancelled: [], // Final state
+    };
+
+    const currentStatus = order.orderStatus as OrderStatus;
+    if (!validTransitions[currentStatus].includes(status)) {
+      throw new Error(`Invalid status transition from ${currentStatus} to ${status}`);
+    }
+
+    // Build update object
+    const updateData: any = {
+      orderStatus: status,
+      $push: {
+        statusHistory: {
+          status,
+          timestamp: new Date(),
+          note: note || `Order ${status}`,
+        },
+      },
+    };
+
+    // Add tracking info if provided (typically when shipping)
+    if (trackingInfo) {
+      updateData.trackingInfo = trackingInfo;
+    }
+
+    const updatedOrder = await OrderModel.findByIdAndUpdate(orderId, updateData, { new: true }).lean();
+    if (!updatedOrder) return null;
+
+    return { ...updatedOrder, _id: updatedOrder._id.toString() } as Order;
+  }
+
+  /**
+   * Get all orders (admin function)
+   */
+  static async getAllOrders(
+    page: number = 1,
+    limit: number = 20,
+    status?: OrderStatus
+  ): Promise<{ orders: Order[]; total: number; pages: number }> {
+    const query = status ? { orderStatus: status } : {};
+    
+    const [orders, total] = await Promise.all([
+      OrderModel.find(query)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .lean(),
+      OrderModel.countDocuments(query),
+    ]);
+
+    return {
+      orders: orders.map(order => ({ ...order, _id: order._id.toString() })) as Order[],
+      total,
+      pages: Math.ceil(total / limit),
+    };
   }
 
   /**

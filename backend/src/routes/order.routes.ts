@@ -13,6 +13,10 @@ router.post(
   OrderController.handleWebhook
 );
 
+// Admin routes (will add admin middleware later in Phase 7)
+router.get('/admin/all', requireAuth, OrderController.getAllOrders);
+router.patch('/:orderId/status', requireAuth, OrderController.updateOrderStatus);
+
 // Protected routes - require authentication
 router.post('/create-payment-intent', requireAuth, OrderController.createPaymentIntent);
 router.post('/confirm', requireAuth, OrderController.confirmOrder);

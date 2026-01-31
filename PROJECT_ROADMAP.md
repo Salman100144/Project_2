@@ -117,7 +117,11 @@
 
 ## Phase 6: Order Tracking ← (Current)
 ### Tasks:
-- [ ] Backend: Order status enum (pending, processing, shipped, delivered)
+- [x] Backend: Order status enum (pending, processing, shipped, delivered)
+- [x] Backend: Status history tracking with timestamps
+- [x] Backend: Tracking info (carrier, tracking number, estimated delivery)
+- [x] Backend: Update order status endpoint (PATCH /api/orders/:id/status)
+- [x] Backend: Get all orders endpoint for admin (GET /api/orders/admin/all)
 - [ ] Backend: Order history endpoint
 - [ ] Backend: Single order detail endpoint
 - [ ] Frontend: Order history page

@@ -110,6 +110,57 @@ export class OrderController {
   }
 
   /**
+   * Update order status (Admin only)
+   * PATCH /api/orders/:orderId/status
+   */
+  static async updateOrderStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orderId = req.params.orderId as string;
+      const { status, note, trackingInfo } = req.body;
+
+      if (!status) {
+        return res.status(400).json({ message: 'Status is required' });
+      }
+
+      const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: 'Invalid status' });
+      }
+
+      const order = await OrderService.updateOrderStatus(orderId, { status, note, trackingInfo });
+
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+
+      res.json(order);
+    } catch (error: any) {
+      if (error.message.includes('Invalid status transition')) {
+        return res.status(400).json({ message: error.message });
+      }
+      next(error);
+    }
+  }
+
+  /**
+   * Get all orders (Admin only)
+   * GET /api/orders/admin/all
+   */
+  static async getAllOrders(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const status = req.query.status as string | undefined;
+
+      const result = await OrderService.getAllOrders(page, limit, status as any);
+      
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Stripe webhook handler
    * POST /api/orders/webhook
    */
