@@ -67,12 +67,12 @@
 
 ---
 
-## Phase 4: Cart & Wishlist
+## Phase 4: Cart & Wishlist ← (Current)
 ### Tasks:
-- [ ] Backend: Cart model
-- [ ] Backend: Cart CRUD endpoints
-- [ ] Backend: Wishlist model
-- [ ] Backend: Wishlist CRUD endpoints
+- [x] Backend: Cart model
+- [x] Backend: Cart CRUD endpoints
+- [x] Backend: Wishlist model
+- [x] Backend: Wishlist CRUD endpoints
 - [ ] Frontend: Cart store (Zustand)
 - [ ] Frontend: Wishlist store
 - [ ] Frontend: Cart page
