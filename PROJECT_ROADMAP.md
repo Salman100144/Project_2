@@ -67,31 +67,34 @@
 
 ---
 
-## Phase 4: Cart & Wishlist ← (Current)
+## Phase 4: Cart & Wishlist ✅
 ### Tasks:
 - [x] Backend: Cart model
 - [x] Backend: Cart CRUD endpoints
 - [x] Backend: Wishlist model
 - [x] Backend: Wishlist CRUD endpoints
-- [ ] Frontend: Cart store (Zustand)
-- [ ] Frontend: Wishlist store
-- [ ] Frontend: Cart page
-- [ ] Frontend: Add to cart functionality
-- [ ] Frontend: Cart sidebar/drawer
-- [ ] Frontend: Quantity controls
-- [ ] Frontend: Wishlist page
-- [ ] Frontend: Move to cart from wishlist
+- [x] Frontend: Cart store (Zustand)
+- [x] Frontend: Wishlist store
+- [x] Frontend: Cart page
+- [x] Frontend: Add to cart functionality
+- [x] Frontend: Quantity controls
+- [x] Frontend: Wishlist page
+- [x] Frontend: Move to cart from wishlist
+- [x] Frontend: Cart/Wishlist badge counts in nav
+- [x] Frontend: ProductCard with cart/wishlist integration
+- [x] Frontend: ProductDetailPage with cart/wishlist integration
 
 ### Acceptance Criteria:
-- Users can add/remove items from cart
-- Cart persists for logged-in users
-- Quantity can be adjusted
-- Cart shows total price
-- Wishlist functionality works
+- ✅ Users can add/remove items from cart
+- ✅ Cart persists for logged-in users
+- ✅ Quantity can be adjusted
+- ✅ Cart shows total price
+- ✅ Wishlist functionality works
+- ✅ Move items from wishlist to cart
 
 ---
 
-## Phase 5: Checkout & Payment (Stripe)
+## Phase 5: Checkout & Payment (Stripe) ← (Current)
 ### Tasks:
 - [ ] Set up Stripe account
 - [ ] Backend: Stripe integration

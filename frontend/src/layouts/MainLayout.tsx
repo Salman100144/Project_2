@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/stores/auth.store';
+import { useCartStore, useCartCount } from '@/stores/cart.store';
+import { useWishlistStore, useWishlistCount } from '@/stores/wishlist.store';
 import { Button } from '@/components/ui/button';
 import { 
   ShoppingBag, 
@@ -15,6 +18,18 @@ import { cn } from '@/lib/utils';
 export function MainLayout() {
   const { user, logout, isLoading } = useAuthStore();
   const location = useLocation();
+  
+  // Cart and Wishlist
+  const { fetchCart } = useCartStore();
+  const { fetchWishlist } = useWishlistStore();
+  const cartCount = useCartCount();
+  const wishlistCount = useWishlistCount();
+
+  // Fetch cart and wishlist on mount
+  useEffect(() => {
+    fetchCart();
+    fetchWishlist();
+  }, [fetchCart, fetchWishlist]);
 
   const handleLogout = async () => {
     await logout();
@@ -23,8 +38,8 @@ export function MainLayout() {
   const navLinks = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/products', label: 'Products', icon: Package },
-    { to: '/cart', label: 'Cart', icon: ShoppingCart, disabled: true },
-    { to: '/wishlist', label: 'Wishlist', icon: Heart, disabled: true },
+    { to: '/cart', label: 'Cart', icon: ShoppingCart, badge: cartCount },
+    { to: '/wishlist', label: 'Wishlist', icon: Heart, badge: wishlistCount },
   ];
 
   return (
@@ -48,18 +63,21 @@ export function MainLayout() {
                 return (
                   <Link
                     key={link.to}
-                    to={link.disabled ? '#' : link.to}
+                    to={link.to}
                     className={cn(
-                      'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                      'relative flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                       isActive
                         ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted',
-                      link.disabled && 'opacity-50 cursor-not-allowed'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     )}
-                    onClick={(e) => link.disabled && e.preventDefault()}
                   >
                     <Icon className="h-4 w-4" />
                     {link.label}
+                    {link.badge !== undefined && link.badge > 0 && (
+                      <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                        {link.badge > 99 ? '99+' : link.badge}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
@@ -95,18 +113,21 @@ export function MainLayout() {
             return (
               <Link
                 key={link.to}
-                to={link.disabled ? '#' : link.to}
+                to={link.to}
                 className={cn(
-                  'flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors',
+                  'relative flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors',
                   isActive
                     ? 'text-primary'
-                    : 'text-muted-foreground',
-                  link.disabled && 'opacity-50 cursor-not-allowed'
+                    : 'text-muted-foreground'
                 )}
-                onClick={(e) => link.disabled && e.preventDefault()}
               >
                 <Icon className="h-5 w-5" />
                 {link.label}
+                {link.badge !== undefined && link.badge > 0 && (
+                  <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+                    {link.badge > 99 ? '99+' : link.badge}
+                  </span>
+                )}
               </Link>
             );
           })}

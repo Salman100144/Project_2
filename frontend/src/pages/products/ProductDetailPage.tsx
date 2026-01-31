@@ -1,6 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useProductStore } from '@/stores/product.store';
+import { useCartStore } from '@/stores/cart.store';
+import { useWishlistStore } from '@/stores/wishlist.store';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getDiscountedPrice } from '@/types/product.types';
@@ -13,12 +15,17 @@ import {
   Shield, 
   RotateCcw,
   Loader2,
-  Package
+  Package,
+  Plus,
+  Minus
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+  
   const { 
     selectedProduct: product, 
     isLoadingProduct, 
@@ -26,6 +33,15 @@ export function ProductDetailPage() {
     fetchProductById,
     clearSelectedProduct 
   } = useProductStore();
+
+  // Cart state
+  const { addToCart, isInCart, getCartItem, isUpdating: isCartUpdating } = useCartStore();
+  const productInCart = product ? isInCart(product.id) : false;
+  const cartItem = product ? getCartItem(product.id) : undefined;
+
+  // Wishlist state
+  const { toggleWishlist, isInWishlist, isUpdating: isWishlistUpdating } = useWishlistStore();
+  const productInWishlist = product ? isInWishlist(product.id) : false;
 
   useEffect(() => {
     if (id) {
@@ -36,6 +52,41 @@ export function ProductDetailPage() {
       clearSelectedProduct();
     };
   }, [id, fetchProductById, clearSelectedProduct]);
+
+  const handleAddToCart = async () => {
+    if (!product || productInCart || product.stock === 0) return;
+
+    const discountedPrice = getDiscountedPrice(product);
+    
+    try {
+      await addToCart({
+        productId: product.id,
+        quantity,
+        price: discountedPrice,
+        title: product.title,
+        thumbnail: product.thumbnail,
+      });
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+    }
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!product) return;
+
+    const discountedPrice = getDiscountedPrice(product);
+
+    try {
+      await toggleWishlist({
+        productId: product.id,
+        title: product.title,
+        price: discountedPrice,
+        thumbnail: product.thumbnail,
+      });
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+    }
+  };
 
   if (isLoadingProduct) {
     return (
@@ -93,7 +144,7 @@ export function ProductDetailPage() {
               {product.images.map((image, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer"
+                  className="shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer"
                 >
                   <img
                     src={image}
@@ -173,14 +224,81 @@ export function ProductDetailPage() {
           </p>
 
           {/* Actions */}
-          <div className="flex gap-3">
-            <Button size="lg" className="flex-1" disabled={product.stock === 0}>
-              <ShoppingCart className="h-5 w-5 mr-2" />
-              {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-            </Button>
-            <Button size="lg" variant="outline">
-              <Heart className="h-5 w-5" />
-            </Button>
+          <div className="space-y-4">
+            {/* Quantity Selector */}
+            {!productInCart && product.stock > 0 && (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium">Quantity:</span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    disabled={quantity <= 1}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-12 text-center font-medium">{quantity}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                    disabled={quantity >= product.stock}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Cart Info */}
+            {productInCart && cartItem && (
+              <p className="text-sm text-green-600">
+                ✓ {cartItem.quantity} item(s) in your cart
+              </p>
+            )}
+
+            <div className="flex gap-3">
+              <Button 
+                size="lg" 
+                className="flex-1" 
+                disabled={product.stock === 0 || productInCart || isCartUpdating}
+                onClick={handleAddToCart}
+              >
+                {isCartUpdating ? (
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                ) : (
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                )}
+                {product.stock === 0 
+                  ? 'Out of Stock' 
+                  : productInCart 
+                    ? 'Added to Cart' 
+                    : 'Add to Cart'}
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={handleToggleWishlist}
+                disabled={isWishlistUpdating}
+                className={cn(
+                  productInWishlist && 'border-red-500 text-red-500 hover:bg-red-50'
+                )}
+              >
+                {isWishlistUpdating ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Heart 
+                    className={cn(
+                      'h-5 w-5',
+                      productInWishlist && 'fill-red-500 text-red-500'
+                    )} 
+                  />
+                )}
+              </Button>
+            </div>
           </div>
 
           {/* Features */}

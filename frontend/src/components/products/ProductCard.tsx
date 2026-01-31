@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Loader2 } from 'lucide-react';
 import type { Product } from '@/types/product.types';
 import { getDiscountedPrice } from '@/types/product.types';
+import { useCartStore } from '@/stores/cart.store';
+import { useWishlistStore } from '@/stores/wishlist.store';
 import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
@@ -14,6 +16,49 @@ interface ProductCardProps {
 export function ProductCard({ product, className }: ProductCardProps) {
   const discountedPrice = getDiscountedPrice(product);
   const hasDiscount = product.discountPercentage > 0;
+
+  // Cart state
+  const { addToCart, isInCart, isUpdating: isCartUpdating } = useCartStore();
+  const productInCart = isInCart(product.id);
+
+  // Wishlist state
+  const { toggleWishlist, isInWishlist, isUpdating: isWishlistUpdating } = useWishlistStore();
+  const productInWishlist = isInWishlist(product.id);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (productInCart || product.stock === 0) return;
+
+    try {
+      await addToCart({
+        productId: product.id,
+        quantity: 1,
+        price: discountedPrice,
+        title: product.title,
+        thumbnail: product.thumbnail,
+      });
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+    }
+  };
+
+  const handleToggleWishlist = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      await toggleWishlist({
+        productId: product.id,
+        title: product.title,
+        price: discountedPrice,
+        thumbnail: product.thumbnail,
+      });
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+    }
+  };
 
   return (
     <Card className={cn('group overflow-hidden transition-all hover:shadow-lg', className)}>
@@ -39,6 +84,28 @@ export function ProductCard({ product, className }: ProductCardProps) {
               Out of stock
             </span>
           )}
+          {/* Wishlist Button */}
+          <Button
+            variant="secondary"
+            size="icon"
+            className={cn(
+              'absolute bottom-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity',
+              productInWishlist && 'opacity-100'
+            )}
+            onClick={handleToggleWishlist}
+            disabled={isWishlistUpdating}
+          >
+            {isWishlistUpdating ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Heart 
+                className={cn(
+                  'h-4 w-4',
+                  productInWishlist && 'fill-red-500 text-red-500'
+                )} 
+              />
+            )}
+          </Button>
         </div>
       </Link>
       
@@ -76,10 +143,19 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <Button 
           size="sm" 
           className="w-full mt-3"
-          disabled={product.stock === 0}
+          disabled={product.stock === 0 || productInCart || isCartUpdating}
+          onClick={handleAddToCart}
         >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+          {isCartUpdating ? (
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <ShoppingCart className="h-4 w-4 mr-2" />
+          )}
+          {product.stock === 0 
+            ? 'Out of Stock' 
+            : productInCart 
+              ? 'In Cart' 
+              : 'Add to Cart'}
         </Button>
       </CardContent>
     </Card>

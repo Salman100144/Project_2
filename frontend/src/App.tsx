@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage, RegisterPage } from '@/pages/auth';
-import { HomePage, ProductsPage, ProductDetailPage } from '@/pages';
+import { HomePage, ProductsPage, ProductDetailPage, CartPage, WishlistPage } from '@/pages';
 import { AuthProvider, ProtectedRoute, GuestRoute } from '@/components/auth';
 import { MainLayout } from '@/layouts/MainLayout';
 
@@ -39,6 +39,8 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="products" element={<ProductsPage />} />
             <Route path="products/:id" element={<ProductDetailPage />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="wishlist" element={<WishlistPage />} />
           </Route>
           
           {/* 404 fallback */}
