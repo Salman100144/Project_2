@@ -94,28 +94,28 @@
 
 ---
 
-## Phase 5: Checkout & Payment (Stripe) ← (Current)
+## Phase 5: Checkout & Payment (Stripe) ✅
 ### Tasks:
-- [ ] Set up Stripe account
-- [ ] Backend: Stripe integration
-- [ ] Backend: Create payment intent endpoint
-- [ ] Backend: Order model
-- [ ] Backend: Webhook for payment confirmation
-- [ ] Frontend: Checkout page
-- [ ] Frontend: Shipping address form
-- [ ] Frontend: Stripe Elements integration
-- [ ] Frontend: Order confirmation page
-- [ ] Frontend: Payment error handling
+- [x] Set up Stripe account
+- [x] Backend: Stripe integration
+- [x] Backend: Create payment intent endpoint
+- [x] Backend: Order model
+- [x] Backend: Webhook for payment confirmation
+- [x] Frontend: Checkout page
+- [x] Frontend: Shipping address form
+- [x] Frontend: Stripe Elements integration
+- [x] Frontend: Order confirmation page
+- [x] Frontend: Payment error handling
 
 ### Acceptance Criteria:
-- Users can enter shipping info
-- Stripe payment form works
-- Order is created after successful payment
-- User receives confirmation
+- ✅ Users can enter shipping info
+- ✅ Stripe payment form works
+- ✅ Order is created after successful payment
+- ✅ User receives confirmation
 
 ---
 
-## Phase 6: Order Tracking
+## Phase 6: Order Tracking ← (Current)
 ### Tasks:
 - [ ] Backend: Order status enum (pending, processing, shipped, delivered)
 - [ ] Backend: Order history endpoint

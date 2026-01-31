@@ -15,7 +15,7 @@ export const orderService = {
    */
   async createPaymentIntent(shippingAddress: ShippingAddress): Promise<CreatePaymentIntentResponse> {
     const response = await api.post<CreatePaymentIntentResponse>(
-      '/orders/create-payment-intent',
+      '/api/orders/create-payment-intent',
       { shippingAddress }
     );
     return response.data;
@@ -25,7 +25,7 @@ export const orderService = {
    * Confirm order after successful payment
    */
   async confirmOrder(paymentIntentId: string, shippingAddress: ShippingAddress): Promise<Order> {
-    const response = await api.post<Order>('/orders/confirm', {
+    const response = await api.post<Order>('/api/orders/confirm', {
       paymentIntentId,
       shippingAddress,
     });
@@ -36,7 +36,7 @@ export const orderService = {
    * Get order by ID
    */
   async getOrder(orderId: string): Promise<Order> {
-    const response = await api.get<Order>(`/orders/${orderId}`);
+    const response = await api.get<Order>(`/api/orders/${orderId}`);
     return response.data;
   },
 
@@ -44,7 +44,7 @@ export const orderService = {
    * Get all user orders
    */
   async getUserOrders(): Promise<Order[]> {
-    const response = await api.get<Order[]>('/orders');
+    const response = await api.get<Order[]>('/api/orders');
     return response.data;
   },
 };
