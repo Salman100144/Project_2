@@ -26,11 +26,11 @@
 ## Phase 2: Authentication
 ### Tasks:
 - [x] Set up BetterAuth on backend
-- [ ] Create User model (Mongoose)
-- [ ] Implement registration endpoint
-- [ ] Implement login endpoint
-- [ ] Implement logout endpoint
-- [ ] Create auth middleware
+- [x] Create User model (Mongoose)
+- [x] Implement registration endpoint (POST /api/auth/sign-up/email)
+- [x] Implement login endpoint (POST /api/auth/sign-in/email)
+- [x] Implement logout endpoint (POST /api/auth/sign-out)
+- [x] Create auth middleware
 - [ ] Frontend: Create auth store (Zustand)
 - [ ] Frontend: Login page
 - [ ] Frontend: Register page

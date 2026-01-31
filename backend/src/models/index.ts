@@ -1,3 +1,3 @@
-// Models will be added here
-// Example: User, Product, Cart, Order, etc.
-export {};
+// Models
+export { default as User } from './user.model';
+export type { IUser, IUserDocument, IUserModel } from './user.model';
