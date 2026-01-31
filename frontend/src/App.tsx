@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage, RegisterPage } from '@/pages/auth';
-import { HomePage, ProductsPage, ProductDetailPage, CartPage, WishlistPage, CheckoutPage, CheckoutSuccessPage } from '@/pages';
+import { HomePage, ProductsPage, ProductDetailPage, CartPage, WishlistPage, CheckoutPage, CheckoutSuccessPage, OrderHistoryPage, OrderDetailPage } from '@/pages';
 import { AuthProvider, ProtectedRoute, GuestRoute } from '@/components/auth';
 import { MainLayout } from '@/layouts/MainLayout';
 
@@ -43,6 +43,8 @@ function App() {
             <Route path="wishlist" element={<WishlistPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="checkout/success" element={<CheckoutSuccessPage />} />
+            <Route path="orders" element={<OrderHistoryPage />} />
+            <Route path="orders/:orderId" element={<OrderDetailPage />} />
           </Route>
           
           {/* 404 fallback */}

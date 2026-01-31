@@ -124,10 +124,10 @@
 - [x] Backend: Get all orders endpoint for admin (GET /api/orders/admin/all)
 - [ ] Backend: Order history endpoint
 - [ ] Backend: Single order detail endpoint
-- [ ] Frontend: Order history page
-- [ ] Frontend: Order detail page
-- [ ] Frontend: Order status tracker component
-- [ ] Frontend: Order timeline visualization
+- [x] Frontend: Order history page
+- [x] Frontend: Order detail page
+- [x] Frontend: Order status tracker component
+- [x] Frontend: Order timeline visualization
 
 ### Acceptance Criteria:
 - Users can view order history

@@ -11,7 +11,8 @@ import {
   Home, 
   Package,
   ShoppingCart,
-  Heart
+  Heart,
+  ClipboardList
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -40,6 +41,7 @@ export function MainLayout() {
     { to: '/products', label: 'Products', icon: Package },
     { to: '/cart', label: 'Cart', icon: ShoppingCart, badge: cartCount },
     { to: '/wishlist', label: 'Wishlist', icon: Heart, badge: wishlistCount },
+    { to: '/orders', label: 'Orders', icon: ClipboardList },
   ];
 
   return (
