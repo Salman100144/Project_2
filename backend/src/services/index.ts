@@ -1,3 +1,2 @@
-// Services will be added here
-// Example: authService, productService, stripeService, etc.
-export {};
+// Services
+export * as productService from './product.service';
