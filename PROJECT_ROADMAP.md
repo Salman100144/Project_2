@@ -31,7 +31,7 @@
 - [x] Implement login endpoint (POST /api/auth/sign-in/email)
 - [x] Implement logout endpoint (POST /api/auth/sign-out)
 - [x] Create auth middleware
-- [ ] Frontend: Create auth store (Zustand)
+- [x] Frontend: Create auth store (Zustand)
 - [ ] Frontend: Login page
 - [ ] Frontend: Register page
 - [ ] Frontend: Protected routes

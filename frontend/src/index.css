@@ -1,68 +1,61 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+@theme {
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(14.9% 0.02 254.6);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(14.9% 0.02 254.6);
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(14.9% 0.02 254.6);
+  --color-primary: oklch(24.1% 0.022 264.4);
+  --color-primary-foreground: oklch(98.5% 0.002 247);
+  --color-secondary: oklch(96.8% 0.007 247);
+  --color-secondary-foreground: oklch(24.1% 0.022 264.4);
+  --color-muted: oklch(96.8% 0.007 247);
+  --color-muted-foreground: oklch(55.1% 0.014 257.4);
+  --color-accent: oklch(96.8% 0.007 247);
+  --color-accent-foreground: oklch(24.1% 0.022 264.4);
+  --color-destructive: oklch(57.7% 0.245 27.3);
+  --color-destructive-foreground: oklch(98.5% 0.002 247);
+  --color-border: oklch(91.3% 0.011 252.9);
+  --color-input: oklch(91.3% 0.011 252.9);
+  --color-ring: oklch(24.1% 0.022 264.4);
+  --radius: 0.625rem;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  * {
+    @apply border-border;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: oklch(14.9% 0.02 254.6);
+    --color-foreground: oklch(98.5% 0.002 247);
+    --color-card: oklch(14.9% 0.02 254.6);
+    --color-card-foreground: oklch(98.5% 0.002 247);
+    --color-popover: oklch(14.9% 0.02 254.6);
+    --color-popover-foreground: oklch(98.5% 0.002 247);
+    --color-primary: oklch(98.5% 0.002 247);
+    --color-primary-foreground: oklch(24.1% 0.022 264.4);
+    --color-secondary: oklch(27% 0.02 254.6);
+    --color-secondary-foreground: oklch(98.5% 0.002 247);
+    --color-muted: oklch(27% 0.02 254.6);
+    --color-muted-foreground: oklch(71.9% 0.013 256.1);
+    --color-accent: oklch(27% 0.02 254.6);
+    --color-accent-foreground: oklch(98.5% 0.002 247);
+    --color-destructive: oklch(65.4% 0.222 29.2);
+    --color-destructive-foreground: oklch(98.5% 0.002 247);
+    --color-border: oklch(27% 0.02 254.6);
+    --color-input: oklch(27% 0.02 254.6);
+    --color-ring: oklch(84.2% 0.006 247);
   }
 }
