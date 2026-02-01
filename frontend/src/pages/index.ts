@@ -4,4 +4,5 @@ export * from './cart';
 export * from './wishlist';
 export * from './checkout';
 export * from './orders';
+export * from './admin';
 export { HomePage } from './HomePage';

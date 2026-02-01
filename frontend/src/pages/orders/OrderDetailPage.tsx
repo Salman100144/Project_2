@@ -79,7 +79,7 @@ export function OrderDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+      <div className="flex flex-col items-center justify-center min-h-100 gap-4">
         <Loader2 className="h-10 w-10 animate-spin text-primary" />
         <p className="text-muted-foreground">Loading order details...</p>
       </div>
@@ -88,7 +88,7 @@ export function OrderDetailPage() {
 
   if (error || !currentOrder) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+      <div className="flex flex-col items-center justify-center min-h-100 gap-4">
         <div className="h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
           <AlertCircle className="h-8 w-8 text-red-500" />
         </div>

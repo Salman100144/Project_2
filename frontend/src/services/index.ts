@@ -12,3 +12,6 @@ export * from './wishlist.service';
 
 export { default as orderService } from './order.service';
 export * from './order.service';
+
+export * as adminService from './admin.service';
+export * from './admin.service';

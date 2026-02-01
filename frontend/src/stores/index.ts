@@ -32,3 +32,5 @@ export {
 } from './wishlist.store';
 
 export { useOrderStore } from './order.store';
+
+export { useAdminStore } from './admin.store';

@@ -23,7 +23,6 @@ export function ProductFilters({ className }: ProductFiltersProps) {
     fetchProductsByCategory,
     searchProducts,
     setSelectedCategory,
-    setSearchQuery,
     setSorting,
     clearFilters,
   } = useProductStore();

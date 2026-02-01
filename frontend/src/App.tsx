@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage, RegisterPage } from '@/pages/auth';
-import { HomePage, ProductsPage, ProductDetailPage, CartPage, WishlistPage, CheckoutPage, CheckoutSuccessPage, OrderHistoryPage, OrderDetailPage } from '@/pages';
+import { HomePage, ProductsPage, ProductDetailPage, CartPage, WishlistPage, CheckoutPage, CheckoutSuccessPage, OrderHistoryPage, OrderDetailPage, AdminDashboardPage, AdminUsersPage, AdminOrdersPage, AdminOrderDetailPage } from '@/pages';
 import { AuthProvider, ProtectedRoute, GuestRoute } from '@/components/auth';
-import { MainLayout } from '@/layouts/MainLayout';
+import { MainLayout, AdminLayout } from '@/layouts';
 
 function App() {
   return (
@@ -45,6 +45,21 @@ function App() {
             <Route path="checkout/success" element={<CheckoutSuccessPage />} />
             <Route path="orders" element={<OrderHistoryPage />} />
             <Route path="orders/:orderId" element={<OrderDetailPage />} />
+          </Route>
+
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
+            <Route path="orders" element={<AdminOrdersPage />} />
+            <Route path="orders/:orderId" element={<AdminOrderDetailPage />} />
           </Route>
           
           {/* 404 fallback */}

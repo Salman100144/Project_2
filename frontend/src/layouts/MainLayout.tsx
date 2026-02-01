@@ -12,7 +12,8 @@ import {
   Package,
   ShoppingCart,
   Heart,
-  ClipboardList
+  ClipboardList,
+  Shield
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -87,6 +88,16 @@ export function MainLayout() {
           </div>
           
           <div className="flex items-center gap-4">
+            {/* Admin Link */}
+            {user?.role === 'admin' && (
+              <Link to="/admin">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Shield className="h-4 w-4" />
+                  <span className="hidden sm:inline">Admin</span>
+                </Button>
+              </Link>
+            )}
+            
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">{user?.name || user?.email}</span>
