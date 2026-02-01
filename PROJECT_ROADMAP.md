@@ -60,10 +60,10 @@
 - [x] Frontend: Pagination
 
 ### Acceptance Criteria:
-- Products display with images, price, title
-- Users can filter by category
-- Users can search products
-- Product detail page shows full info
+- ✅ Products display with images, price, title
+- ✅ Users can filter by category
+- ✅ Users can search products
+- ✅ Product detail page shows full info
 
 ---
 
